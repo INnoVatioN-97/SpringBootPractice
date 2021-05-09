@@ -12,5 +12,7 @@
     Author : <%=article.getName()%>  <br>
     내용 : <%=article.getContent()%>
 
+<button onclick="location='modifyArticle'">글 수정하기</button>
+
 </body>
 </html>

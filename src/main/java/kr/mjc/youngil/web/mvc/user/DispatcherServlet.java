@@ -36,6 +36,8 @@ public class DispatcherServlet extends HttpServlet {
             case "/mvc/article/articleList" -> articleController.articleList(request,response);
             case "/mvc/article/addArticle" -> articleController.addArticle(request,response);
             case "/mvc/article/getArticle" -> articleController.viewArticle(request,response);
+            case "/mvc/article/articleForm" -> articleController.articleForm(request,response);
+            case "/mvc/article/modifyArticle" -> articleController.modifyArticle(request,response);
 
             default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }

@@ -64,12 +64,13 @@ public class ArticleController {
      */
     public void addArticle(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-
+        HttpSession session = request.getSession();
         Article article = new Article();
+        User user = (User) session.getAttribute("USER");
         article.setTitle(request.getParameter("title"));
         article.setContent(request.getParameter("content"));
-        article.setName(request.getParameter("name"));
-        article.setUserId(Integer.parseInt(request.getParameter("userId")));
+        article.setName(user.getName());
+        article.setUserId(user.getUserId());
 
 
         try {
@@ -80,4 +81,30 @@ public class ArticleController {
                     "/mvc/article/articleList?msg=Something Wrong. Try this again.");
         }
     }
+
+    /**
+     * 게시글 수정
+     */
+    public void modifyArticle(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+
+        request.getRequestDispatcher("/WEB-INF/jsp/model2/article/articleList.jsp")
+                .forward(request, response);
+    }
+    /**
+     * 게시글 수정
+     * public int updateArticle(Article article) {
+     *         return namedParameterJdbcTemplate
+     *                 .update(UPDATE_ARTICLE, new BeanPropertySqlParameterSource(article));
+     *     }
+     *
+     * 게시글 삭제
+     *public int deleteArticle(int articleId, int userId) {
+     *Map<String, Object> params = new HashMap<>();
+     *params.put("articleId", articleId);
+     *params.put("userId", userId);
+     *return namedParameterJdbcTemplate.update(DELETE_ARTICLE, params);
+     *}
+     */
 }
