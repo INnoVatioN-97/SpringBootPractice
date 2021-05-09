@@ -67,10 +67,10 @@ public class ArticleController {
         HttpSession session = request.getSession();
         Article article = new Article();
         User user = (User) session.getAttribute("USER");
+        article.setUserId(user.getUserId());
         article.setTitle(request.getParameter("title"));
         article.setContent(request.getParameter("content"));
         article.setName(user.getName());
-        article.setUserId(user.getUserId());
 
 
         try {
@@ -88,9 +88,53 @@ public class ArticleController {
     public void modifyArticle(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession();
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/article/articleList.jsp")
-                .forward(request, response);
+        User user = (User) session.getAttribute("USER");
+
+//        String title = request.getParameter("title");
+//        String content = request.getParameter("content");
+        String articleUserId = request.getParameter("userId");
+        int sessionUserId = user.getUserId();
+        if(Integer.parseInt(articleUserId) == sessionUserId)
+            request.getRequestDispatcher("/WEB-INF/jsp/model2/article/modifyArticle.jsp")
+                    .forward(request, response);
+
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    public void deleteArticle(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("USER");
+        int sessionUserId = user.getUserId();
+        int articleUserId = Integer.parseInt(request.getParameter("userId"));
+        int articleId = Integer.parseInt(request.getParameter("articleId"));
+
+        if(sessionUserId == articleUserId){
+            articleDao.deleteArticle(articleId, sessionUserId);
+            response.sendRedirect(request.getContextPath() + "/mvc/article/articleList");
+        }else{
+            //userId가 서로 다를 때
+        }
+
+    }
+
+    /**
+     * 게시글 수정 액션
+     */
+    public void editArticle(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Article article = new Article();
+        article.setTitle(request.getParameter("title"));
+        article.setContent(request.getParameter("content"));
+        article.setArticleId(Integer.parseInt(request.getParameter("articleId")));
+        article.setUserId(Integer.parseInt(request.getParameter("userId")));
+        articleDao.updateArticle(article);
+        response.sendRedirect(request.getContextPath() + "/mvc/article/articleList");
+
     }
     /**
      * 게시글 수정
