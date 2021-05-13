@@ -12,15 +12,7 @@ public class Article {
     String cdate;
     String udate;
 
-    @Override
-    public String toString() {
-        return  "글 번호 : " +
-                articleId +
-                ", 제목='" + title + '\'' +
-                ", 회원 번호=" + userId +
-                ", 이름='" + name + '\'' +
-                ", 작성일='" + cdate + '\'' +
-                ", 수정일='" + udate + '\'' +
-                '}';
+    public String getContentHtml() {
+        return content.replaceAll("\n", "<br>");
     }
 }

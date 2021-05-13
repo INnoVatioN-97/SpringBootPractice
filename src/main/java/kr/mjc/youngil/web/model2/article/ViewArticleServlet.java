@@ -34,7 +34,7 @@ public class ViewArticleServlet extends HttpServlet {
      }catch (Exception e){
         e.printStackTrace();
      }
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/article/viewArticle.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/model2/article/articleView.jsp")
                 .forward(request, response);
     }
 }

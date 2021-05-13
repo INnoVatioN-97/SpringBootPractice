@@ -1,4 +1,4 @@
-package kr.mjc.youngil.web.mvc.user;
+package kr.mjc.youngil.web.mvc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +17,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Autowired
     UserController userController;
+
     @Autowired
     ArticleController articleController;
 
@@ -33,15 +34,22 @@ public class DispatcherServlet extends HttpServlet {
             case "/mvc/user/userInfo" -> userController.userInfo(request, response);
             case "/mvc/user/addUser" -> userController.addUser(request, response);
             case "/mvc/user/login" -> userController.login(request, response);
-            case "/mvc/article/articleList" -> articleController.articleList(request,response);
-            case "/mvc/article/addArticle" -> articleController.addArticle(request,response);
-            case "/mvc/article/getArticle" -> articleController.viewArticle(request,response);
-            case "/mvc/article/articleForm" -> articleController.articleForm(request,response);
-            case "/mvc/article/modifyArticle" -> articleController.modifyArticle(request,response);
-            case "/mvc/article/deleteArticle" -> articleController.deleteArticle(request,response);
-            case "/mvc/article/editArticle" -> articleController.editArticle(request,response);
+            case "/mvc/user/logout" -> userController.logout(request, response);
 
-
+            case "/mvc/article/articleList" -> articleController
+                    .articleList(request, response);
+            case "/mvc/article/articleView" -> articleController
+                    .articleView(request, response);
+            case "/mvc/article/articleForm" -> articleController
+                    .articleForm(request, response);
+            case "/mvc/article/articleEdit" -> articleController
+                    .articleEdit(request, response);
+            case "/mvc/article/addArticle" -> articleController
+                    .addArticle(request, response);
+            case "/mvc/article/updateArticle" -> articleController
+                    .updateArticle(request, response);
+            case "/mvc/article/deleteArticle" -> articleController
+                    .deleteArticle(request, response);
             default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
