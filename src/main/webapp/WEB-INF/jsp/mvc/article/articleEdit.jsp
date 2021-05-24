@@ -2,28 +2,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="<%= request.getContextPath()%>/">
-    <style type="text/css">
-        input {
-            width: 95%;
-        }
-        textarea {
-            width: 95%;
-            height: 200px;
-        }
-    </style>
+  <base href="<%= request.getContextPath()%>/">
+  <style type="text/css">
+    input {
+      width: 95%;
+    }
+
+    textarea {
+      width: 95%;
+      height: 200px;
+    }
+  </style>
 </head>
 <body>
 <h3>글수정</h3>
 <% Article article = (Article) request.getAttribute("article"); %>
 <form action="./mvc/article/updateArticle" method="post">
-    <p><input type="text" name="title" value="<%= article.getTitle()%>" required
-              autofocus/></p>
-    <p><textarea name="content" required><%= article.getContent()%></textarea></p>
-    <input type="hidden" name="articleId" value="<%=article.getArticleId()%>"/>
-    <p>
-        <button type="submit">저장</button>
-    </p>
+  <p><input type="text" name="title" value="<%= article.getTitle()%>" required
+            autofocus/></p>
+  <p><textarea name="content" required><%= article.getContent()%></textarea></p>
+<%--  글 수정 form에서 보이지 않는 hidden input으로 글번호를 넣어둬 action 측에서
+이 게시글의 글번호를 알 수 있게한다.--%>
+  <input type="hidden" name="articleId" value="<%=article.getArticleId()%>"/>
+  <p>
+    <button type="submit">저장</button>
+  </p>
 </form>
 </body>
 </html>

@@ -15,16 +15,16 @@ import java.util.List;
 @WebServlet("/model2/user/userList")
 public class UserListServlet extends HttpServlet {
 
-    @Autowired
-    private UserDao userDao;
+  @Autowired
+  private UserDao userDao;
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<User> userList = userDao.listUsers(0, 100);
-        request.setAttribute("userList", userList);
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    List<User> userList = userDao.listUsers(0, 100);
+    request.setAttribute("userList", userList);
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/user/userList.jsp")
-                .forward(request, response);
-    }
+    request.getRequestDispatcher("/WEB-INF/jsp/model2/user/userList.jsp")
+        .forward(request, response);
+  }
 }

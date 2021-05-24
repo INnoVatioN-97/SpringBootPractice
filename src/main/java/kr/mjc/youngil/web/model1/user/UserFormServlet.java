@@ -12,15 +12,15 @@ import java.util.Optional;
 @WebServlet("/model1/user/userForm")
 public class UserFormServlet extends HttpServlet {
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
 
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        String msg =
-                Optional.ofNullable((String) request.getParameter("msg")).orElse("");
-        out.format("""
+    response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
+    String msg =
+        Optional.ofNullable((String) request.getParameter("msg")).orElse("");
+    out.format("""
         <!DOCTYPE html>
         <html>
         <body>
@@ -35,6 +35,6 @@ public class UserFormServlet extends HttpServlet {
         </body>
         </html>
         """, msg);
-        out.close();
-    }
+    out.close();
+  }
 }

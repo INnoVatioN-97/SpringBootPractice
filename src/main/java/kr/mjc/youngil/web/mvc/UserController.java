@@ -16,103 +16,103 @@ import java.io.IOException;
 @Component
 public class UserController {
 
-    private final UserDao userDao;
+  private final UserDao userDao;
 
-    @Autowired
-    public UserController(UserDao userDao) {
-        this.userDao = userDao;
+  @Autowired
+  public UserController(UserDao userDao) {
+    this.userDao = userDao;
+  }
+
+  /**
+   * 사용자 목록 화면
+   */
+  public void userList(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    request.setAttribute("userList", userDao.listUsers(0, 100));
+
+    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userList.jsp")
+        .forward(request, response);
+  }
+
+  /**
+   * 사용자 등록 화면
+   */
+  public void userForm(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userForm.jsp")
+        .forward(request, response);
+  }
+
+  /**
+   * 로그인 화면
+   */
+  public void loginForm(HttpServletRequest request,
+                        HttpServletResponse response)
+      throws ServletException, IOException {
+
+    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/loginForm.jsp")
+        .forward(request, response);
+  }
+
+  /**
+   * 개인정보 화면
+   */
+  public void userInfo(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userInfo.jsp")
+        .forward(request, response);
+  }
+
+  /**
+   * 사용자 등록 액션
+   */
+  public void addUser(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+
+    User user = new User();
+    user.setEmail(request.getParameter("email"));
+    user.setPassword(request.getParameter("password"));
+    user.setName(request.getParameter("name"));
+
+    try {
+      userDao.addUser(user);
+      response.sendRedirect(request.getContextPath() + "/mvc/user/userList");
+    } catch (DuplicateKeyException e) {
+      response.sendRedirect(
+          request.getContextPath() + "/mvc/user/userForm?msg=Duplicate email");
     }
+  }
 
-    /**
-     * 사용자 목록 화면
-     */
-    public void userList(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setAttribute("userList", userDao.listUsers(0, 100));
+  /**
+   * 로그인 액션
+   */
+  public void login(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userList.jsp")
-                .forward(request, response);
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+
+    try {
+      User user = userDao.login(email, password);
+      HttpSession session = request.getSession();
+      session.setAttribute("USER", user);
+      response.sendRedirect(request.getContextPath() + "/mvc/user/userInfo");
+    } catch (EmptyResultDataAccessException e) {
+      response.sendRedirect(request.getContextPath() +
+          "/mvc/user/loginForm?msg=Wrong email or password");
     }
-
-    /**
-     * 사용자 등록 화면
-     */
-    public void userForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userForm.jsp")
-                .forward(request, response);
-    }
-
-    /**
-     * 로그인 화면
-     */
-    public void loginForm(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws ServletException, IOException {
-
-        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/loginForm.jsp")
-                .forward(request, response);
-    }
-
-    /**
-     * 개인정보 화면
-     */
-    public void userInfo(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userInfo.jsp")
-                .forward(request, response);
-    }
-
-    /**
-     * 사용자 등록 액션
-     */
-    public void addUser(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        User user = new User();
-        user.setEmail(request.getParameter("email"));
-        user.setPassword(request.getParameter("password"));
-        user.setName(request.getParameter("name"));
-
-        try {
-            userDao.addUser(user);
-            response.sendRedirect(request.getContextPath() + "/mvc/user/userList");
-        } catch (DuplicateKeyException e) {
-            response.sendRedirect(
-                    request.getContextPath() + "/mvc/user/userForm?msg=Duplicate email");
-        }
-    }
-
-    /**
-     * 로그인 액션
-     */
-    public void login(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        try {
-            User user = userDao.login(email, password);
-            HttpSession session = request.getSession();
-            session.setAttribute("USER", user);
-            response.sendRedirect(request.getContextPath() + "/mvc/user/userInfo");
-        } catch (EmptyResultDataAccessException e) {
-            response.sendRedirect(request.getContextPath() +
-                    "/mvc/user/loginForm?msg=Wrong email or password");
-        }
-    }
+  }
 
 
-    /**
-     * 로그 아웃
-     */
-    public void logout(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); //기존에 세션을 무효화해 로그아웃을 구현한다.
-        response.sendRedirect(request.getContextPath() + "/");
-    }
+  /**
+   * 로그 아웃
+   */
+  public void logout(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    HttpSession session = request.getSession();
+    session.invalidate();
+    response.sendRedirect(request.getContextPath() + "/");
+  }
 }

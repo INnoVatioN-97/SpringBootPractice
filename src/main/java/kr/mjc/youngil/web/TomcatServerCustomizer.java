@@ -21,30 +21,29 @@ import java.util.HashSet;
 @Component
 @Slf4j
 public class TomcatServerCustomizer
-        implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+    implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
-    @Override
-    public void customize(TomcatServletWebServerFactory factory) {
-        Collection<TomcatContextCustomizer> col = new ArrayList<>();
-        col.add((context) -> {
-            JspPropertyGroup jspPropertyGroup = new JspPropertyGroup();
-            //원래 web.xml 에서 설정하는건데 얘는 이렇게한다.
-            jspPropertyGroup.addUrlPattern("*.jsp");
-            jspPropertyGroup.addUrlPattern("*.html");
-            jspPropertyGroup.setPageEncoding("UTF-8");
-            JspPropertyGroupDescriptor jspPropertyGroupDescriptor =
-                    new JspPropertyGroupDescriptorImpl(jspPropertyGroup);
+  @Override
+  public void customize(TomcatServletWebServerFactory factory) {
+    Collection<TomcatContextCustomizer> col = new ArrayList<>();
+    col.add((context) -> {
+      JspPropertyGroup jspPropertyGroup = new JspPropertyGroup();
+      jspPropertyGroup.addUrlPattern("*.jsp");
+      jspPropertyGroup.addUrlPattern("*.html");
+      jspPropertyGroup.setPageEncoding("UTF-8");
+      JspPropertyGroupDescriptor jspPropertyGroupDescriptor =
+          new JspPropertyGroupDescriptorImpl(jspPropertyGroup);
 
-            Collection<JspPropertyGroupDescriptor> jspPropertyGroupDescriptors =
-                    new HashSet<>();
-            jspPropertyGroupDescriptors.add(jspPropertyGroupDescriptor);
+      Collection<JspPropertyGroupDescriptor> jspPropertyGroupDescriptors =
+          new HashSet<>();
+      jspPropertyGroupDescriptors.add(jspPropertyGroupDescriptor);
 
-            JspConfigDescriptor jspConfigDescriptor =
-                    new JspConfigDescriptorImpl(jspPropertyGroupDescriptors,
-                            new HashSet<>());
-            context.setJspConfigDescriptor(jspConfigDescriptor);
-        });
-        factory.setTomcatContextCustomizers(col);
-        log.info("톰캣 커스터마이저 실행");
-    }
+      JspConfigDescriptor jspConfigDescriptor =
+          new JspConfigDescriptorImpl(jspPropertyGroupDescriptors,
+              new HashSet<>());
+      context.setJspConfigDescriptor(jspConfigDescriptor);
+    });
+    factory.setTomcatContextCustomizers(col);
+    log.info("톰캣 커스터마이저 실행");
+  }
 }

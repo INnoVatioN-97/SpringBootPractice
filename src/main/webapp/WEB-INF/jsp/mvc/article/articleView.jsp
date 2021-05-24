@@ -3,15 +3,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="<%= request.getContextPath()%>/">
+  <base href="<%= request.getContextPath()%>/">
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/mvc/menu.jsp" %>
 <h3>게시글 보기</h3>
 <p><a
-        href="./mvc/article/articleEdit?articleId=<%=article.getArticleId()%>">수정</a>
-    <a
-            href="./mvc/article/deleteArticle?articleId=<%=article.getArticleId()%>">삭제</a>
+    href="./mvc/article/articleEdit?articleId=<%=article.getArticleId()%>">수정</a>
+  <a
+      href="./mvc/article/deleteArticle?articleId=<%=article.getArticleId()%>">삭제</a>
 </p>
 <hr/>
 <p><%= article.getArticleId()%>. <%=article.getTitle()%>
@@ -20,6 +20,7 @@
 </p>
 <hr/>
 <p><%= article.getContentHtml()%>
+<%--  게시글 속 \n들을 모두 <br>태그로 교체해 정상적으로 개행이 이뤄지게 한다.--%>
 </p>
 <hr/>
 </body>
