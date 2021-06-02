@@ -24,9 +24,8 @@ public class DispatcherServlet extends HttpServlet {
   @Override
   protected void service(HttpServletRequest request,
                          HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     String uri = request.getRequestURI();
-
     switch (uri) {
       case "/mvc/user/userList" -> userController.userList(request, response);
       case "/mvc/user/userForm" -> userController.userForm(request, response);
@@ -37,19 +36,19 @@ public class DispatcherServlet extends HttpServlet {
       case "/mvc/user/logout" -> userController.logout(request, response);
 
       case "/mvc/article/articleList" -> articleController
-          .articleList(request, response);
+              .articleList(request, response);
       case "/mvc/article/articleView" -> articleController
-          .articleView(request, response);
+              .articleView(request, response);
       case "/mvc/article/articleForm" -> articleController
-          .articleForm(request, response);
+              .articleForm(request, response);
       case "/mvc/article/articleEdit" -> articleController
-          .articleEdit(request, response);
+              .articleEdit(request, response);
       case "/mvc/article/addArticle" -> articleController
-          .addArticle(request, response);
+              .addArticle(request, response);
       case "/mvc/article/updateArticle" -> articleController
-          .updateArticle(request, response);
+              .updateArticle(request, response);
       case "/mvc/article/deleteArticle" -> articleController
-          .deleteArticle(request, response);
+              .deleteArticle(request, response);
       default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }

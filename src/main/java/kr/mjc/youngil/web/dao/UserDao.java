@@ -8,16 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -27,26 +17,23 @@ import java.util.Map;
 @Repository
 public class UserDao {
 
+  public static final String COUNT_USERS = "select count(userId) from user";
+  public static final String UPDATE_USER =
+          "update user set email=:email, name=:name where userId=:userId";
   private static final String LIST_USERS
           = "select userId, email, name from user order by userId desc limit ?,?";
+  private static final String ADD_USER = """
+      insert user(email, password, name)
+      values(:email, sha2(:password,256), :name)""";
+  private static final String LOGIN = """
+      select userId, email, name from user
+      where (email, password) = (?, sha2(?,256))""";
+  private static final String GET_USER =
+          "select userId, email, name from user where userId=?";
+  private static final String UPDATE_PASSWORD = """
+      update user set password=sha2(:newPassword,256)
+      where userId=:userId and password=sha2(:password,256)""";
 
-  private static final String ADD_USER
-          =
-          "insert user(email, password, name) values(:email, sha2(:password,256), :name)";
-
-  private static final String LOGIN
-          =
-          "select userId, email, name from user where (email, password) = (?, sha2(?,256))";
-
-  private static final String GET_USER
-          = "select userId, email, name from user where userId=?";
-
-  private static final String UPDATE_EMAIL
-          = "update user set email=:email where userId=:userId";
-
-  private static final String UPDATE_PASSWORD
-          =
-          "update user set password=sha2(:newPassword,256) where userId=:userId and password=sha2(:password,256)";
 
   private JdbcTemplate jdbcTemplate;
 
@@ -66,6 +53,13 @@ public class UserDao {
    */
   public List<User> listUsers(int offset, int count) {
     return jdbcTemplate.query(LIST_USERS, rowMapper, offset, count);
+  }
+
+  /**
+   * 사용자 수
+   */
+  public Integer countUsers() {
+    return jdbcTemplate.queryForObject(COUNT_USERS, Integer.class);
   }
 
   /**
@@ -99,15 +93,11 @@ public class UserDao {
   /**
    * 이메일 수정
    *
-   * @return 수정한 행의 갯수
    * @throws DuplicateKeyException 이메일이 중복되어 이메일 수정에 실패할 경우
    */
-  public int updateEmail(int userId, String email)
-          throws DuplicateKeyException {
-    Map<String, Object> params = new HashMap<>();
-    params.put("userId", userId);
-    params.put("email", email);
-    return namedParameterJdbcTemplate.update(UPDATE_EMAIL, params);
+  public void updateUser(User user) throws DuplicateKeyException {
+    namedParameterJdbcTemplate
+            .update(UPDATE_USER, new BeanPropertySqlParameterSource(user));
   }
 
   /**

@@ -78,7 +78,7 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) { // 로그인 안했으면 로그인 화면으로 redirect
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
         request.getRequestDispatcher(
@@ -99,7 +99,7 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) { // 로그인 안했으면 로그인 화면으로 redirect
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
         int articleId = Integer.parseInt(request.getParameter("articleId"));
@@ -117,7 +117,7 @@ public class ArticleController {
     }
 
     /**
-     * 게시글 등록 액션. 로그인 안했으면 로그인 화면으로 redirect.
+     * 게시글 등록 액션. 로그인 안했으면 400 Bad Request
      */
     @PostMapping("/addArticle")
     public void addArticle(HttpServletRequest request,
@@ -125,9 +125,8 @@ public class ArticleController {
         HttpSession session = request.getSession();
         // 로그인 체크
         User user = (User) session.getAttribute("USER");
-        if (user == null) { // 로그인 안했으면 로그인 화면으로 redirect
-            response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+        if (user == null) { // 로그인 안했으면 400 Bad Request
+            response.sendError(Response.SC_BAD_REQUEST);
             return;
         }
         Article article = new Article();
@@ -138,12 +137,12 @@ public class ArticleController {
         article.setName(user.getName());
 
         articleDao.addArticle(article);
-        response.sendRedirect("/springmvc/v1/article/articleList");
+        response.sendRedirect(
+                request.getContextPath() + "/app/springmvc/v1/article/articleList");
     }
 
     /**
-     * 게시글 수정 액션. 로그인 안했으면 로그인 화면으로 redirect.
-     * 사용자가 다르면 401 Unauthorized.
+     * 게시글 수정 액션. 로그인 안했거나 사용자가 다르면 400 Bad Request
      */
     @PostMapping("/updateArticle")
     public void updateArticle(HttpServletRequest request,
@@ -151,9 +150,8 @@ public class ArticleController {
         HttpSession session = request.getSession();
         // 로그인 체크
         User user = (User) session.getAttribute("USER");
-        if (user == null) { // 로그인 안했으면 로그인 화면으로 redirect
-            response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+        if (user == null) { // 로그인 안했으면 400 Bad Request
+            response.sendError(Response.SC_BAD_REQUEST);
             return;
         }
 
@@ -167,10 +165,10 @@ public class ArticleController {
         if (updatedRows > 0)  // 성공하면 게시글 보기 화면으로
             response.sendRedirect(
                     request.getContextPath() +
-                            "/springmvc/v1/article/articleView?articleId=" +
+                            "/app/springmvc/v1/article/articleView?articleId=" +
                             article.getArticleId());
-        else // 사용자가 다르면 수정이 안됨. 401 Unauthorized
-            response.sendError(Response.SC_UNAUTHORIZED);
+        else // 사용자가 다르면 수정이 안됨. 400 Bad Request
+            response.sendError(Response.SC_BAD_REQUEST);
     }
 
     /**
@@ -185,7 +183,7 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) { // 로그인 안했으면 로그인 화면으로 redirect
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
 
@@ -193,9 +191,8 @@ public class ArticleController {
 
         int updatedRows = articleDao.deleteArticle(articleId, user.getUserId());
         if (updatedRows > 0)  // 성공하면 게시글 목록 화면으로
-            response
-                    .sendRedirect(
-                            request.getContextPath() + "/springmvc/v1/article/articleList");
+            response.sendRedirect(
+                    request.getContextPath() + "/app/springmvc/v1/article/articleList");
         else // 사용자가 다르면 삭제가 안됨. 401 Unauthorized
             response.sendError(Response.SC_UNAUTHORIZED);
     }

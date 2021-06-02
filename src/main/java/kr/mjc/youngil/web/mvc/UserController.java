@@ -27,21 +27,21 @@ public class UserController {
    * 사용자 목록 화면
    */
   public void userList(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     request.setAttribute("userList", userDao.listUsers(0, 100));
 
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userList.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
    * 사용자 등록 화면
    */
   public void userForm(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
-    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userForm.jsp")
-        .forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/joinForm.jsp")
+            .forward(request, response);
   }
 
   /**
@@ -49,27 +49,27 @@ public class UserController {
    */
   public void loginForm(HttpServletRequest request,
                         HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/loginForm.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
    * 개인정보 화면
    */
   public void userInfo(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userInfo.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
    * 사용자 등록 액션
    */
   public void addUser(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     User user = new User();
     user.setEmail(request.getParameter("email"));
@@ -81,7 +81,7 @@ public class UserController {
       response.sendRedirect(request.getContextPath() + "/mvc/user/userList");
     } catch (DuplicateKeyException e) {
       response.sendRedirect(
-          request.getContextPath() + "/mvc/user/userForm?msg=Duplicate email");
+              request.getContextPath() + "/mvc/user/userForm?msg=Duplicate email");
     }
   }
 
@@ -89,7 +89,7 @@ public class UserController {
    * 로그인 액션
    */
   public void login(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     String email = request.getParameter("email");
     String password = request.getParameter("password");
@@ -101,7 +101,7 @@ public class UserController {
       response.sendRedirect(request.getContextPath() + "/mvc/user/userInfo");
     } catch (EmptyResultDataAccessException e) {
       response.sendRedirect(request.getContextPath() +
-          "/mvc/user/loginForm?msg=Wrong email or password");
+              "/mvc/user/loginForm?msg=Wrong email or password");
     }
   }
 
@@ -110,7 +110,7 @@ public class UserController {
    * 로그 아웃
    */
   public void logout(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
     HttpSession session = request.getSession();
     session.invalidate();
     response.sendRedirect(request.getContextPath() + "/");

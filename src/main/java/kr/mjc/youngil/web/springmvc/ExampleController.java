@@ -23,6 +23,7 @@ public class ExampleController {
 
     /**
      * Servlet API를 사용하지 않음. return type이 String
+     *
      * @return
      */
     @GetMapping("/springmvc/hello")
@@ -34,6 +35,7 @@ public class ExampleController {
 
     /**
      * Servlet API를 사용하지 않음. return type이 void
+     *
      * @return
      */
     @GetMapping("/springmvc/welcome")

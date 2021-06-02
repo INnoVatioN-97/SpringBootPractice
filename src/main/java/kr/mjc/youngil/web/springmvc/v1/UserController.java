@@ -55,11 +55,11 @@ public class UserController {
     /**
      * 사용자 등록 화면
      */
-    @GetMapping("/userForm")
+    @GetMapping("/joinForm")
     public void userForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/userForm.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/joinForm.jsp")
                 .forward(request, response);
     }
 
@@ -89,7 +89,7 @@ public class UserController {
     /**
      * 사용자 등록 액션
      */
-    @PostMapping("/addUser")
+    @PostMapping("/join")
     public void addUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
@@ -101,11 +101,11 @@ public class UserController {
         try {
             userDao.addUser(user);
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/userList");
+                    request.getContextPath() + "/app/springmvc/v1/user/userList");
         } catch (DuplicateKeyException e) {
             response.sendRedirect(
                     request.getContextPath() +
-                            "/springmvc/v1/user/userForm?msg=Duplicate email");
+                            "/app/springmvc/v1/user/userForm?msg=Duplicate email");
         }
     }
 
@@ -124,10 +124,10 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("USER", user);
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/userInfo");
+                    request.getContextPath() + "/app/springmvc/v1/user/userInfo");
         } catch (EmptyResultDataAccessException e) {
             response.sendRedirect(request.getContextPath() +
-                    "/springmvc/v1/user/loginForm?msg=Wrong email or password");
+                    "/app/springmvc/v1/user/loginForm?msg=Wrong email or password");
         }
     }
 

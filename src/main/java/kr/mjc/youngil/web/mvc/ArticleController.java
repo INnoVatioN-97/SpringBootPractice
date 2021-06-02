@@ -30,16 +30,17 @@ public class ArticleController {
    */
   public void articleList(HttpServletRequest request,
                           HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     String pageStr =
-        Optional.ofNullable(request.getParameter("page")).orElse("1");
+            Optional.ofNullable(request.getParameter("page")).orElse("1");
     int page = Integer.parseInt(pageStr);
     int count = 25;
     int offset = (page - 1) * count;
     List<Article> articleList = articleDao.listArticles(offset, count);
+
     request.setAttribute("articleList", articleList);
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/article/articleList.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
@@ -47,12 +48,12 @@ public class ArticleController {
    */
   public void articleView(HttpServletRequest request,
                           HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     int articleId = Integer.parseInt(request.getParameter("articleId"));
     Article article = articleDao.getArticle(articleId);
     request.setAttribute("article", article);
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/article/articleView.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
@@ -60,7 +61,7 @@ public class ArticleController {
    */
   public void articleForm(HttpServletRequest request,
                           HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
     HttpSession session = request.getSession();
     // 로그인 체크
     User user = (User) session.getAttribute("USER");
@@ -69,7 +70,7 @@ public class ArticleController {
       return;
     }
     request.getRequestDispatcher("/WEB-INF/jsp/mvc/article/articleForm.jsp")
-        .forward(request, response);
+            .forward(request, response);
   }
 
   /**
@@ -78,7 +79,7 @@ public class ArticleController {
    */
   public void articleEdit(HttpServletRequest request,
                           HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
     HttpSession session = request.getSession();
     // 로그인 체크
     User user = (User) session.getAttribute("USER");
@@ -93,7 +94,7 @@ public class ArticleController {
     if (user.getUserId() == article.getUserId()) { // 사용자가 같으면 수정화면으로
       request.setAttribute("article", article);
       request.getRequestDispatcher("/WEB-INF/jsp/mvc/article/articleEdit.jsp")
-          .forward(request, response);
+              .forward(request, response);
     } else { // 사용자가 다르면 401 Unauthorized
       response.sendError(Response.SC_UNAUTHORIZED);
     }
@@ -145,8 +146,8 @@ public class ArticleController {
     int updatedRows = articleDao.updateArticle(article);
     if (updatedRows > 0)  // 성공하면 게시글 보기 화면으로
       response.sendRedirect(
-          request.getContextPath() + "/mvc/article/articleView?articleId=" +
-              article.getArticleId());
+              request.getContextPath() + "/mvc/article/articleView?articleId=" +
+                      article.getArticleId());
     else // 사용자가 다르면 수정이 안됨. 401 Unauthorized
       response.sendError(Response.SC_UNAUTHORIZED);
   }
@@ -170,7 +171,7 @@ public class ArticleController {
     int updatedRows = articleDao.deleteArticle(articleId, user.getUserId());
     if (updatedRows > 0)  // 성공하면 게시글 목록 화면으로
       response
-          .sendRedirect(request.getContextPath() + "/mvc/article/articleList");
+              .sendRedirect(request.getContextPath() + "/mvc/article/articleList");
     else // 사용자가 다르면 삭제가 안됨. 401 Unauthorized
       response.sendError(Response.SC_UNAUTHORIZED);
   }
