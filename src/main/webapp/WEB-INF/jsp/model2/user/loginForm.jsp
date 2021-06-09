@@ -11,7 +11,7 @@
   </p>
 </form>
 <p style="color:red;"><%= Optional.ofNullable(request.getParameter("msg"))
-    .orElse("")%>
+        .orElse("")%>
 </p>
 </body>
 </html>

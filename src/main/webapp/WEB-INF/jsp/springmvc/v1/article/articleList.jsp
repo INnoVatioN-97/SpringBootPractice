@@ -8,13 +8,13 @@
 <body>
 <%@ include file="/WEB-INF/jsp/springmvc/v1/menu.jsp" %>
 <h3>게시글 목록</h3>
-<p><a href="./springmvc/v1/article/articleForm">글쓰기</a></p>
+<p><a href="./app/springmvc/v1/article/articleForm">글쓰기</a></p>
 <% List<Article> articleList = (List<Article>) request
-    .getAttribute("articleList");
+        .getAttribute("articleList");
   for (Article article : articleList) {%>
 <p><a
-    href="./springmvc/v1/article/articleView?articleId=<%= article.getArticleId()%>"><%= article
-    .getArticleId()%>. <%= article.getTitle() %>
+        href="./app/springmvc/v1/article/articleView?articleId=<%= article.getArticleId()%>"><%= article
+        .getArticleId()%>. <%= article.getTitle() %>
 </a> / <%=article.getName()%>, <%=article.getUdate()%>
 </p>
 <%

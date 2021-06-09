@@ -46,6 +46,7 @@ public class TomcatServerCustomizer
 
       // add welcome file list
       context.addWelcomeFile("/index.html");
+      context.addWelcomeFile("/index.jsp");
     });
     factory.setTomcatContextCustomizers(col);
     log.info("톰캣 커스터마이저 실행");
